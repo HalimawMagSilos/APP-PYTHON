@@ -1,19 +1,17 @@
-"""
-Authentication dependency for FastAPI routes.
-Supports:
-- x-api-key header
-- Bearer JWT (PyJWT)
-Return: a small dict describing the auth method or raises HTTPException(401)
-"""
-from fastapi import Header, HTTPException
+from fastapi import Header, HTTPException, Request
 from typing import Optional
 import jwt
 from app.config import Config
 
-def jwt_or_api_key(
+async def jwt_or_api_key(
+    request: Request,
     authorization: Optional[str] = Header(None),
     x_api_key: Optional[str] = Header(None)
 ):
+    # Skip auth for OPTIONS preflight
+    if request.method == "OPTIONS":
+        return {"method": "options_preflight"}
+
     # API Key check
     if x_api_key:
         if x_api_key in Config.API_KEYS:
