@@ -1,6 +1,10 @@
-const BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost/afrs-microservice').replace(/\/+$/, '');
+// facialAPI.js
+const BASE = (import.meta.env.VITE_API_BASE_URL || 'https://app-python-4s9g.onrender.com').replace(/\/+$/, '');
 const API_KEY = import.meta.env.VITE_API_KEY || 'dev-api-key';
 
+/**
+ * Ensures input is a Blob. Accepts Blob, File, or base64 string.
+ */
 function ensureBlob(input, mime = "image/jpeg") {
   if (input instanceof Blob) {
     return input;
@@ -16,12 +20,14 @@ function ensureBlob(input, mime = "image/jpeg") {
   throw new Error("Invalid image input: must be Blob, File, or base64 string");
 }
 
+/**
+ * Sends a POST request with FormData.
+ */
 async function postForm(path, form) {
   const res = await fetch(`${BASE}${path}`, {
     method: "POST",
     headers: {
-      "x-api-key": API_KEY,
-      "Authorization": `Bearer ${API_KEY}`,
+      "x-api-key": API_KEY, // only API key, remove Authorization
     },
     body: form,
   });
@@ -37,7 +43,6 @@ async function postForm(path, form) {
 }
 
 // ---- Enroll a patient ----
-// ---- Enroll a patient ----
 export async function enrollPatient(patientId, imageFile) {
   const formData = new FormData();
   formData.append("image", ensureBlob(imageFile));
@@ -52,7 +57,7 @@ export async function enrollPatient(patientId, imageFile) {
 
   const body = res.body;
   const success =
-    body?.status === "enrolled" ||   // ✅ ADD THIS
+    body?.status === "enrolled" ||
     body?.status === "success" ||
     body?.success === true ||
     /enrolled/i.test(body?.message || "");
@@ -63,7 +68,6 @@ export async function enrollPatient(patientId, imageFile) {
 
   return body;
 }
-
 
 // ---- Match a patient ----
 export async function matchPatient(imageFile) {
