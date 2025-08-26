@@ -33,6 +33,9 @@ class Config:
         PGPORT = int(os.getenv("PGPORT", 5432))
         PGDATABASE = os.getenv("PGDATABASE", "afrs_db")
 
+    # <--- Make sure PG_POOL_SIZE is always defined
+    PG_POOL_SIZE = int(os.getenv("PG_POOL_SIZE", 5))
+
     # RabbitMQ
     RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://guest:guest@localhost:5672/")
 
