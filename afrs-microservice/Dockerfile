@@ -14,7 +14,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Install Python deps
 COPY requirements.txt /app/
 RUN python -m pip install --upgrade pip setuptools wheel
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt --break-system-packages
 
 # Install dev dependencies (pytest, etc.)
 RUN pip install pytest pytest-asyncio
