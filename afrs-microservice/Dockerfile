@@ -32,7 +32,8 @@ ENV PYTHONUNBUFFERED=1 \
     HOME=/app \
     MPLCONFIGDIR=/app/.config/matplotlib \
     YOLO_CONFIG_DIR=/app/.config/ultralytics \
-    HF_HOME=/app/.cache/huggingface
+    HF_HOME=/app/.cache/huggingface \
+    PATH=/app/.local/bin:$PATH
 
 # Switch to non-root user
 USER afrs
