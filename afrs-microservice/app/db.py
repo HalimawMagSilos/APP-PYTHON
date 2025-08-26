@@ -7,31 +7,38 @@ from psycopg2 import pool, sql, errors
 from app.config import Config
 from app.utils import logger
 
-# Initialize a connection pool
-try:
-    _pool = psycopg2.pool.SimpleConnectionPool(
-        1,  # min connections
-        Config.PG_POOL_SIZE,  # max connections
-        user=Config.PGUSER,
-        password=Config.PGPASSWORD,
-        host=Config.PGHOST,
-        port=Config.PGPORT,
-        database=Config.PGDATABASE
-    )
-    logger.info("Postgres connection pool created successfully.")
-except Exception as e:
-    logger.exception("Error creating Postgres connection pool: %s", e)
-    raise
+_pool = None  # lazy initialization
+
+
+def get_pool():
+    """Initialize the connection pool if it doesn't exist yet."""
+    global _pool
+    if _pool is None:
+        try:
+            _pool = psycopg2.pool.SimpleConnectionPool(
+                1,
+                Config.PG_POOL_SIZE,
+                user=Config.PGUSER,
+                password=Config.PGPASSWORD,
+                host=Config.PGHOST,
+                port=Config.PGPORT,
+                database=Config.PGDATABASE
+            )
+            logger.info("Postgres connection pool created successfully.")
+        except Exception as e:
+            logger.exception("Error creating Postgres connection pool: %s", e)
+            raise
+    return _pool
 
 
 def get_conn():
     """Get a connection from the pool."""
-    return _pool.getconn()
+    return get_pool().getconn()
 
 
 def put_conn(conn):
     """Return a connection back to the pool."""
-    _pool.putconn(conn)
+    get_pool().putconn(conn)
 
 
 def ensure_table():

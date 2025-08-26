@@ -3,6 +3,7 @@ Application configuration (environment-driven).
 Change via environment variables in production.
 """
 import os
+from urllib.parse import urlparse
 
 
 class Config:
@@ -17,12 +18,20 @@ class Config:
     # postgres://<user>:<password>@<host>:5432/<dbname>
     DATABASE_URL = os.getenv("postgresql://afrs_db_user:EuzDZ0oNOE92E4X0o7VucRpzuR5PQOKJ@dpg-d2mkk88gjchc73cok6p0-a/afrs_db")  
 
-    PGHOST = os.getenv("PGHOST")
-    PGPORT = int(os.getenv("PGPORT", 5432))
-    PGUSER = os.getenv("PGUSER")
-    PGPASSWORD = os.getenv("PGPASSWORD")
-    PGDATABASE = os.getenv("PGDATABASE")
-    PG_POOL_SIZE = int(os.getenv("PG_POOL_SIZE", 5))
+    if DATABASE_URL:
+        result = urlparse(DATABASE_URL)
+        PGUSER = result.username
+        PGPASSWORD = result.password
+        PGHOST = result.hostname
+        PGPORT = result.port
+        PGDATABASE = result.path[1:]  # remove leading "/"
+    else:
+        # fallback for local dev
+        PGUSER = os.getenv("PGUSER", "postgres")
+        PGPASSWORD = os.getenv("PGPASSWORD", "")
+        PGHOST = os.getenv("PGHOST", "localhost")
+        PGPORT = int(os.getenv("PGPORT", 5432))
+        PGDATABASE = os.getenv("PGDATABASE", "afrs_db")
 
     # RabbitMQ
     RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://guest:guest@localhost:5672/")
