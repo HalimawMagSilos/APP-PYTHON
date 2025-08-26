@@ -4,13 +4,34 @@ Startup initializes DB table and ensures model/index directories exist.
 """
 import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from app.routes import enroll, match
 from app.db import ensure_table
 from app.utils import ensure_dir, logger
 from app.config import Config
 import os
 
-app = FastAPI(title="AFRS - AI Facial Recognition Service", version="1.0.0", description="AFRS microservice for SPRS integration")
+app = FastAPI(
+    title="AFRS - AI Facial Recognition Service",
+    version="1.0.0",
+    description="AFRS microservice for SPRS integration"
+)
+
+# ---------- CORS FIX ----------
+origins = [
+    "http://localhost:5173",       # your frontend dev
+    "http://localhost",            # optional
+    "https://your-frontend-domain.com"  # deployed frontend if any
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,          # allow these origins
+    allow_credentials=True,
+    allow_methods=["*"],            # allow GET, POST, etc.
+    allow_headers=["*"],            # allow custom headers like x-api-key
+)
+# -------------------------------
 
 app.include_router(enroll.router, prefix="/enroll", tags=["Enroll"])
 app.include_router(match.router, prefix="/match", tags=["Match"])
