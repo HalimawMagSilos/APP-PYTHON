@@ -38,7 +38,7 @@ ENV PYTHONUNBUFFERED=1 \
 USER afrs
 
 # Expose service port
-EXPOSE $PORT
+EXPOSE 10000
 
-# Run with Uvicorn
-CMD ["sh", "-c", "uvicorn app.main:app --host 0.0.0.0 --port ${PORT}"]
+# Run with Uvicorn (use shell form so ${PORT} interpolates)
+CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}
