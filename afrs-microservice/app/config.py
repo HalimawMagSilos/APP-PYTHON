@@ -9,7 +9,7 @@ from urllib.parse import urlparse
 class Config:
     # App
     HOST = os.getenv("AFRS_HOST", "0.0.0.0")
-    PORT = int(os.getenv("PORT", os.getenv("AFRS_PORT", 10000)))
+    PORT = int(os.getenv("PORT", os.getenv("AFRS_PORT", 8010)))
     LOG_LEVEL = os.getenv("AFRS_LOG_LEVEL", "INFO")
 
     

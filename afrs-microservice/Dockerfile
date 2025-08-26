@@ -39,7 +39,7 @@ ENV PYTHONUNBUFFERED=1 \
 USER afrs
 
 # Expose service port
-EXPOSE 10000
+EXPOSE 8010
 
 # Run with Uvicorn using python -m to ensure it's found
-CMD sh -c 'python -m uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-10000}'
+CMD sh -c 'python -m uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8010}'
