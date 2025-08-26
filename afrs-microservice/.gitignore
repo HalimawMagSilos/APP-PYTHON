@@ -1,0 +1,20 @@
+.venv/
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+
+# Virtual environment
+.venv/
+
+# pytest cache
+.pytest_cache/
+
+# HuggingFace cache
+hf-cache/
+
+# VSCode & IDEs
+.vscode/
+.idea/

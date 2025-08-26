@@ -1,0 +1,89 @@
+openapi: 3.0.0
+info:
+  title: ASS - Appointment & Scheduling System
+  version: "1.0.0"
+servers:
+  - url: http://localhost:4000
+paths:
+  /appointments:
+    post:
+      summary: Book a new appointment (external patient via SPRS)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewAppointment'
+      responses:
+        '201':
+          description: Created
+    get:
+      summary: List appointments (filters: patientId, doctorId, date)
+      parameters:
+        - in: query
+          name: patientId
+          schema: { type: string }
+        - in: query
+          name: doctorId
+          schema: { type: integer }
+        - in: query
+          name: date
+          schema: { type: string, format: date }
+      responses:
+        '200': { description: OK }
+  /appointments/{id}:
+    put:
+      summary: Reschedule an appointment
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Reschedule'
+      responses:
+        '200': { description: OK }
+    delete:
+      summary: Cancel appointment (soft cancel)
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema: { type: integer }
+      responses:
+        '204': { description: No Content }
+  /queue:
+    get:
+      summary: Get current queue (Emergency > Booked > Walk-in)
+      parameters:
+        - in: query
+          name: doctorId
+          schema: { type: integer }
+        - in: query
+          name: date
+          schema: { type: string, format: date }
+      responses:
+        '200': { description: OK }
+components:
+  schemas:
+    NewAppointment:
+      type: object
+      required: [patientId, doctorId, appointmentDate, startTime]
+      properties:
+        patientId: { type: string }
+        doctorId: { type: integer }
+        appointmentDate: { type: string, format: date }
+        startTime: { type: string }
+        endTime: { type: string }
+        queueType: { type: string, enum: [EMERGENCY, BOOKED, WALKIN], default: BOOKED }
+    Reschedule:
+      type: object
+      required: [appointmentDate, startTime]
+      properties:
+        appointmentDate: { type: string, format: date }
+        startTime: { type: string }
+        endTime: { type: string }

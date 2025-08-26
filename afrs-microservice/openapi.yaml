@@ -1,0 +1,39 @@
+openapi: "3.0.0"
+info:
+  title: "AFRS Microservice"
+  version: "1.0.0"
+paths:
+  /enroll/:
+    post:
+      summary: "Enroll a patient's face embedding"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                patient_id:
+                  type: integer
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
+  /match/:
+    post:
+      summary: "Match incoming face to stored embeddings"
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: OK
