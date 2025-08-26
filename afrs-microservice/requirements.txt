@@ -6,7 +6,7 @@ python-multipart==0.0.6
 cryptography==41.0.3
 opencv-python==4.8.0.76
 ultralytics==8.0.223
-transformers==4.42.0
+transformers>=5.0.0
 torch==2.2.2
 faiss-cpu==1.7.4
 Pillow==10.0.0
