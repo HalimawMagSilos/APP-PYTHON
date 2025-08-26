@@ -4,8 +4,9 @@ Change via environment variables in production.
 """
 import os
 from urllib.parse import urlparse
+from dotenv import load_dotenv
 
-
+load_dotenv() 
 class Config:
     # App
     HOST = os.getenv("AFRS_HOST", "0.0.0.0")
@@ -16,7 +17,7 @@ class Config:
     # Database (Postgres on Render)
     # Render sets DATABASE_URL like:
     # postgres://<user>:<password>@<host>:5432/<dbname>
-    DATABASE_URL = os.getenv("DATABASE_URL")  
+    DATABASE_URL = os.getenv("DATABASE_URL")
 
     if DATABASE_URL:
         result = urlparse(DATABASE_URL)
@@ -24,14 +25,9 @@ class Config:
         PGPASSWORD = result.password
         PGHOST = result.hostname
         PGPORT = result.port
-        PGDATABASE = result.path[1:]  # remove leading "/"
+        PGDATABASE = result.path[1:]
     else:
-        # fallback for local dev
-        PGUSER = os.getenv("PGUSER", "postgres")
-        PGPASSWORD = os.getenv("PGPASSWORD", "")
-        PGHOST = os.getenv("PGHOST", "localhost")
-        PGPORT = int(os.getenv("PGPORT", 5432))
-        PGDATABASE = os.getenv("PGDATABASE", "afrs_db")
+        raise RuntimeError("DATABASE_URL is not set in environment")
 
     # <--- Make sure PG_POOL_SIZE is always defined
     PG_POOL_SIZE = int(os.getenv("PG_POOL_SIZE", 5))
