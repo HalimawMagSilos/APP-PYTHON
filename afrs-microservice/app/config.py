@@ -4,19 +4,25 @@ Change via environment variables in production.
 """
 import os
 
+
 class Config:
     # App
     HOST = os.getenv("AFRS_HOST", "0.0.0.0")
-    PORT = int(os.getenv("AFRS_PORT", 8000))
+    PORT = int(os.getenv("AFRS_PORT", 10000))
     LOG_LEVEL = os.getenv("AFRS_LOG_LEVEL", "INFO")
 
-    # MySQL
-    MYSQL_HOST = os.getenv("MYSQL_HOST", "mysql")
-    MYSQL_PORT = int(os.getenv("MYSQL_PORT", 3306))
-    MYSQL_USER = os.getenv("MYSQL_USER", "afrs")
-    MYSQL_PASS = os.getenv("MYSQL_PASS", "afrs_123")
-    MYSQL_DB = os.getenv("MYSQL_DB", "afrs_db")
-    MYSQL_POOL_SIZE = int(os.getenv("MYSQL_POOL_SIZE", 5))
+    
+    # Database (Postgres on Render)
+    # Render sets DATABASE_URL like:
+    # postgres://<user>:<password>@<host>:5432/<dbname>
+    DATABASE_URL = os.getenv("postgresql://afrs_db_user:EuzDZ0oNOE92E4X0o7VucRpzuR5PQOKJ@dpg-d2mkk88gjchc73cok6p0-a/afrs_db")  
+
+    PGHOST = os.getenv("PGHOST")
+    PGPORT = int(os.getenv("PGPORT", 5432))
+    PGUSER = os.getenv("PGUSER")
+    PGPASSWORD = os.getenv("PGPASSWORD")
+    PGDATABASE = os.getenv("PGDATABASE")
+    PG_POOL_SIZE = int(os.getenv("PG_POOL_SIZE", 5))
 
     # RabbitMQ
     RABBITMQ_URL = os.getenv("RABBITMQ_URL", "amqp://guest:guest@localhost:5672/")
