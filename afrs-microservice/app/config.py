@@ -16,7 +16,7 @@ class Config:
     # Database (Postgres on Render)
     # Render sets DATABASE_URL like:
     # postgres://<user>:<password>@<host>:5432/<dbname>
-    DATABASE_URL = os.getenv("postgresql://afrs_db_user:EuzDZ0oNOE92E4X0o7VucRpzuR5PQOKJ@dpg-d2mkk88gjchc73cok6p0-a/afrs_db")  
+    DATABASE_URL = os.getenv("DATABASE_URL")  
 
     if DATABASE_URL:
         result = urlparse(DATABASE_URL)
