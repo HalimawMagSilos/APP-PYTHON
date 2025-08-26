@@ -8,7 +8,7 @@ import os
 class Config:
     # App
     HOST = os.getenv("AFRS_HOST", "0.0.0.0")
-    PORT = int(os.getenv("AFRS_PORT", 10000))
+    PORT = int(os.getenv("PORT", os.getenv("AFRS_PORT", 10000)))
     LOG_LEVEL = os.getenv("AFRS_LOG_LEVEL", "INFO")
 
     
@@ -37,8 +37,7 @@ class Config:
     AES_PASSPHRASE = os.getenv("AFRS_AES_PASSPHRASE", "change-me-32bytes")  # passphrase used for key derivation
     AES_SALT = os.getenv("AFRS_AES_SALT", "afrs_salt_v1").encode()
 
-    # FAISS persistence
-    DATA_FOLDER = os.getenv("AFRS_DATA_FOLDER", "/data")   # default /data (mounted)
+    DATA_FOLDER = os.getenv("AFRS_DATA_FOLDER", "/app/data")
     FAISS_INDEX_PATH = os.getenv("FAISS_INDEX_PATH", os.path.join(DATA_FOLDER, "faiss_index.bin"))
     FAISS_META_PATH  = os.getenv("FAISS_META_PATH", os.path.join(DATA_FOLDER, "faiss_meta.json"))
 
